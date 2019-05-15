@@ -6,7 +6,6 @@ from bs4 import BeautifulSoup
 CONTEST_URL = 'https://atcoder.jp/contests/?lang=ja'
 
 def _get_context_tag_list(url: str):
-    """ get_context_tags """
     res = requests.get(url)
     soup = BeautifulSoup(res.text, 'html.parser')
     plan_tag = soup.find('h3', text='予定されたコンテスト').find_next_sibling()
@@ -14,7 +13,6 @@ def _get_context_tag_list(url: str):
     return ctags
 
 def get_contest_plan():
-    """ get_contest_plan """
     ctags = _get_context_tag_list(CONTEST_URL)
     # Parse tag list
     cplan = []
@@ -32,11 +30,13 @@ def get_contest_plan():
         rate = elems[3]
         intervals_min = hours*60 + minutes
         end_time = start_time + timedelta(minutes=intervals_min)
+        contest_url = "https://atcoder.jp" + tag.find_all('a')[1].get('href')
         # Pack required information
         cplan.append({
             'start_time': start_time,
             'end_time': end_time,
             'name': name,
-            'rate': rate
+            'rate': rate,
+            'url': contest_url
         })
     return cplan
