@@ -8,6 +8,10 @@ from lib import atcoder
 
 class AtCoderClient(discord.Client):
     """ AtCoderClient """
+    _channel_id = None
+    #_last_get_minute = None
+    _last_get_day = None
+
     def __init__(self, channel_id):
         super().__init__()
         self._channel_id = channel_id
@@ -33,6 +37,15 @@ class AtCoderClient(discord.Client):
         # Send message to channel
         await channel.send(msg)
 
+    #async def _schedule_send_every_minute(self, channel):
+    #    """ _schedule_send_every_minute """
+    #    while True:
+    #        minute = datetime.now().strftime("%M")
+    #        if minute != self._last_get_minute:
+    #            await self._send_contest_plan(channel)
+    #            self._last_get_minute = minute
+    #        await asyncio.sleep(1)
+
     async def _schedule_send_everyday(self, channel):
         """ _schedule_send_everyday """
         while True:
@@ -47,6 +60,7 @@ class AtCoderClient(discord.Client):
         print('on ready')
         channel = self.get_channel(self._channel_id)
         asyncio.ensure_future(self._schedule_send_everyday(channel))
+        #asyncio.ensure_future(self._schedule_send_every_minute(channel))
 
     async def on_message(self, message):
         """ on_message """
