@@ -9,8 +9,8 @@ JST = timezone(timedelta(hours=+9), 'JST')
 WEEK_LIST = ['月', '火', '水', '木', '金', '土', '日']
 
 def convert_week_knj(week_id: int) -> str:
-    if week_id > len(WEEK_LIST):
-        raise Exception
+    if not (0 <= week_id and week_id < len(WEEK_LIST)):
+        raise ValueError(f"[ERROR] week_id is invalid: {week_id}")
     return WEEK_LIST[week_id]
 
 class AtCoderClient(discord.Client):

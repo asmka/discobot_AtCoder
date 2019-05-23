@@ -13,7 +13,12 @@ def _get_context_tag_list(url: str):
     return ctags
 
 def get_contest_plan():
-    ctags = _get_context_tag_list(CONTEST_URL)
+    ctags = []
+    try:
+        ctags = _get_context_tag_list(CONTEST_URL)
+    except:
+        print('[WARN] _get_context_tag_list raised exception')
+        return []
     # Parse tag list
     cplan = []
     for tag in ctags:
