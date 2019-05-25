@@ -76,8 +76,8 @@ class AtCoderClient(discord.Client):
 
     async def _inform_contest_before(self, channel, hours=0, minutes=0):
         is_already_sent = True  # Set True not to send message at booted
-        is_before = False
         while True:
+            is_before = False
             now = datetime.now(JST)
             contest_plan = atcoder.get_contest_plan()
             today_contests = []
