@@ -101,7 +101,7 @@ class AtCoderClient(discord.Client):
             await asyncio.sleep(1)
 
     async def on_ready(self):
-        print('on ready')
+        print('on ready', flush=True)
         for cid in self._channel_ids:
             channel = self.get_channel(cid)
             asyncio.ensure_future(self._inform_plan_everyday(channel))

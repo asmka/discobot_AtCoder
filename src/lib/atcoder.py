@@ -1,4 +1,3 @@
-""" atcoder """
 from datetime import datetime, timedelta
 import requests
 from bs4 import BeautifulSoup
@@ -17,7 +16,7 @@ def get_contest_plan():
     try:
         ctags = _get_context_tag_list(CONTEST_URL)
     except:
-        print('[WARN] _get_context_tag_list raised exception')
+        print('[WARN] _get_context_tag_list raised exception', flush=True)
         return []
     # Parse tag list
     cplan = []
