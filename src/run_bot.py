@@ -9,11 +9,12 @@ JST = timezone(timedelta(hours=+9), 'JST')
 WEEK_LIST = ['月', '火', '水', '木', '金', '土', '日']
 
 def convert_week_knj(week_id: int) -> str:
-    if not (0 <= week_id and week_id < len(WEEK_LIST)):
+    if week_id < 0 or week_id >= len(WEEK_LIST):
         raise ValueError(f"[ERROR] week_id is invalid: {week_id}")
     return WEEK_LIST[week_id]
 
 class AtCoderClient(discord.Client):
+    _is_called_on_ready = False
     _channel_ids = ()
     _last_get_minute = datetime.now(JST).strftime("%M")
     _last_get_day = date.today()
@@ -102,11 +103,14 @@ class AtCoderClient(discord.Client):
 
     async def on_ready(self):
         print('on ready', flush=True)
-        for cid in self._channel_ids:
-            channel = self.get_channel(cid)
-            asyncio.ensure_future(self._inform_plan_everyday(channel))
-            asyncio.ensure_future(self._inform_contest_before(channel, hours=1))
-            asyncio.ensure_future(self._inform_contest_before(channel, minutes=5))
+        if not self._is_called_on_ready:
+            for cid in self._channel_ids:
+                channel = self.get_channel(cid)
+                asyncio.ensure_future(self._inform_plan_everyday(channel))
+                asyncio.ensure_future(self._inform_contest_before(channel, hours=1))
+                asyncio.ensure_future(self._inform_contest_before(channel, minutes=5))
+            self._is_called_on_ready = True
+
 
     async def on_message(self, message):
         # API 'get contest'
